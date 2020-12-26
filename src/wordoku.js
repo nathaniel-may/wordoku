@@ -5,18 +5,20 @@ document.getElementById("app").innerHTML = generateWordoku(10);
 function generateWordoku(difficulty) {
     console.log("generating puzzle");
     var puzzle = sudoku.generate(difficultyScale(difficulty));
-    while (!unique(diagonal(sudoku.solve(puzzle)))) {
+    var solution = sudoku.solve(puzzle);
+    while (!unique(diagonal(solution))) {
         console.log("puzzle diagonal is not unique")
         console.log("generating another puzzle")
-        puzzle = sudoku.generate(difficultyScale(difficulty))
+        puzzle = sudoku.generate(difficultyScale(difficulty));
+        solution = sudoku.solve(puzzle);
     }
     console.log("puzzle with unique diagonal found!");
     console.log(puzzle)
 
     console.log("picking nine letter word")
-    const word = "";
+    const word = pickWord();
 
-    const wordoku = wordize(word, puzzle);
+    const wordoku = wordize(word, solution, puzzle);
     console.log("puzzle generated!");
     console.log(wordoku);
     return wordoku;
@@ -29,14 +31,22 @@ function pickWord() {
     return word;
 }
 
-function wordize(word, puzzle) {
+function wordize(word, solution, puzzle) {
     console.log("translating puzzle into letters");
-    const diag = diagonal(puzzle);
+    const diag = diagonal(solution);
 
-    var wordoku = puzzle;
-    for(i = 0; i < 10; i++) {
-        wordoku = wordoku.split(diag[i]).join(word.charAt(i));
-    }
+    console.log("diag: " + diag)
+
+    const wordoku = puzzle
+        .split(diag[0]).join(word.charAt(0))
+        .split(diag[1]).join(word.charAt(1))
+        .split(diag[2]).join(word.charAt(2))
+        .split(diag[3]).join(word.charAt(3))
+        .split(diag[4]).join(word.charAt(4))
+        .split(diag[5]).join(word.charAt(5))
+        .split(diag[6]).join(word.charAt(6))
+        .split(diag[7]).join(word.charAt(7))
+        .split(diag[8]).join(word.charAt(8));
 
     console.log("translated: ");
     console.log(wordoku);
