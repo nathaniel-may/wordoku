@@ -44,14 +44,12 @@ function wordize(word : string, solution : string, puzzle : string) : string {
     console.log("translating puzzle into letters");
     const diag = fromArray(diagonal(solution));
     console.log("diag: " + diag)
-
     const letters = fromArray(word.split(''));
-    const zipped = zip(diag, letters);
 
-    const wordoku = foldl((b, a) => b.split(a[0]).join(a[1]), puzzle, zipped)
-
+    const wordoku = foldl((b, a) => b.split(a[0]).join(a[1]), puzzle, zip(diag, letters))
     console.log("translated: ");
     console.log(wordoku);
+    
     return wordoku;
 }
 
