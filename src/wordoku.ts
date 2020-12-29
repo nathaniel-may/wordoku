@@ -42,14 +42,13 @@ function pickWord(wordlist: string[]) : string {
 // takes a puzzle and its solution and returns the letter version
 function wordize(word : string, solution : string, puzzle : string) : string {
     console.log("translating puzzle into letters");
-    const diag = diagonal(solution);
+    const diag = fromArray(diagonal(solution));
     console.log("diag: " + diag)
 
-    const letters = word.split('');
-    const zipped = zip(fromArray(diag), fromArray(letters));
+    const letters = fromArray(word.split(''));
+    const zipped = zip(diag, letters);
 
-    const wordoku = 
-        fromList(zipped).reduce((b, a) => b.split(a[0]).join(a[1]), puzzle)
+    const wordoku = foldl((b, a) => b.split(a[0]).join(a[1]), puzzle, zipped)
 
     console.log("translated: ");
     console.log(wordoku);
@@ -148,17 +147,17 @@ function zipWith<A, B, C>(f: (a: A, b: B) => C, as: List<A>, bs: List<B>) : List
     }
 }
 
+function foldl<A, B>(f: (b: B, a: A) => B, z: B, xs: List<A>) : B {
+    switch (xs.tag) {
+        case "nil"  : return z;
+        case "cons" : return f(foldl(f, z, xs.t), xs.h);
+    }
+}
+
 // function map<A, B>(f: (a: A) => B, xs: List<A>) : List<B> {
 //     switch (xs.tag) {
 //         case "nil"  : return nil;
 //         case "cons" : return cons(f(xs.h), map(f, xs.t));
-//     }
-// }
-
-// function foldl<A, B>(f: (b: B, a: A) => B, z: B, xs: List<A>) : B {
-//     switch (xs.tag) {
-//         case "nil"  : return z;
-//         case "cons" : return f(foldl(f, z, xs.t), xs.h);
 //     }
 // }
 
