@@ -3327,4 +3327,4 @@ const wordlist = [
     , "zygantrum"
     , "zygomatic"
     , "zygosperm"
-    , "zymogenic" ]
+    , "zymogenic" ] as const;
