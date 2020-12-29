@@ -8,6 +8,8 @@
     Please see the README for more details.
 */
 
+export { sudoku };
+
 (function(root){
     var sudoku = root.sudoku = {};  // Global reference to the sudoku library
 

@@ -7,12 +7,10 @@
   <body>
     <div id="app"></div>
 
-    <script src="target/sudoku.js"></script>
-    <script src="target/wordlist.js"></script>
-    <script src="target/wordoku.js"></script>
+    <script src="target/bundle.js"></script>
     
     <script type="application/javascript">
-        document.getElementById("app").innerHTML = generateWordoku(10, wordlist, sudoku);
+        document.getElementById("app").innerHTML = main.main(10);
     </script>
   </body>
 </html>

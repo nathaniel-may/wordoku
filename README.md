@@ -6,7 +6,7 @@ Generates a sudoku that uses letters instead of numbers. These puzzles have the 
 
 compile typescript:
 ```
-tsc
+> tsc && browserify target/app.js --standalone main > target/bundle.js
 ```
 
 there are no tests at this time

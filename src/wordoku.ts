@@ -7,7 +7,7 @@ interface SudokuGen {
 }
 
 // main function for creating a puzzle
-export function generateWordoku(difficulty : number, wordlist: string[], sudoku: SudokuGen) : string {
+export function generateWordoku(difficulty : number, wordlist: readonly string[], sudoku: SudokuGen) : string {
     console.log("generating puzzle");
     const puzzle = sudoku.generate(difficultyScale(difficulty));
     const solution = sudoku.solve(puzzle);
@@ -32,7 +32,7 @@ export function generateWordoku(difficulty : number, wordlist: string[], sudoku:
 
 // impure function that returns a random word from a list
 // defaults if the list is empty
-function pickWord(wordlist: string[]) : string {
+function pickWord(wordlist: readonly string[]) : string {
     const word = wordlist[getRandomInt(0, wordlist.length)];
     switch (word) {
         case undefined : return "abcdefghi";

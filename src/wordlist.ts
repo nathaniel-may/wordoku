@@ -1,4 +1,4 @@
-const wordlist = [
+export const wordlist = [
       "abducting"
     , "abduction"
     , "abductors"
