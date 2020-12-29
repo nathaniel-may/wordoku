@@ -8,33 +8,31 @@ interface SudokuGen {
 // main function for creating a puzzle
 function generateWordoku(difficulty : number, wordlist: string[], sudoku: SudokuGen) : string {
     console.log("generating puzzle");
-    var puzzle = sudoku.generate(difficultyScale(difficulty));
-    var solution = sudoku.solve(puzzle);
-    while (!unique(diagonal(solution))) {
-        console.log("puzzle diagonal is not unique")
-        console.log("generating another puzzle")
-        puzzle = sudoku.generate(difficultyScale(difficulty));
-        solution = sudoku.solve(puzzle);
+    const puzzle = sudoku.generate(difficultyScale(difficulty));
+    const solution = sudoku.solve(puzzle);
+    if (!unique(diagonal(solution))) {
+        console.log("puzzle diagonal is not unique");
+        return generateWordoku(difficulty, wordlist, sudoku)
+    } else {
+        console.log("puzzle with unique diagonal found!");
+        console.log(puzzle)
+    
+        console.log("picking nine letter word")
+        const word = pickWord(wordlist);
+        console.log(word);
+
+        const wordoku = wordize(word, solution, puzzle);
+        console.log("puzzle generated!");
+        console.log(wordoku);
+        
+        return wordoku;
     }
-    console.log("puzzle with unique diagonal found!");
-    console.log(puzzle)
-
-    console.log("picking nine letter word")
-    const word = pickWord(wordlist);
-
-    const wordoku = wordize(word, solution, puzzle);
-    console.log("puzzle generated!");
-    console.log(wordoku);
-    return wordoku;
 }
 
 // impure function that returns a random word from a list
 // defaults if the list is empty
 function pickWord(wordlist: string[]) : string {
-    console.log("picking random word");
     const word = wordlist[getRandomInt(0, wordlist.length)];
-    console.log(word);
-
     switch (word) {
         case undefined : return "abcdefghi";
         default        : return word
