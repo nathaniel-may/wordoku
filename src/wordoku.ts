@@ -1,10 +1,12 @@
 
+// interface so that the generator can be easily swapped out
 interface SudokuGen {
     generate(difficulty: number): string
     solve(puzzle: string): string
 }
 
-function generateWordoku(difficulty : number, sudoku: SudokuGen) : string {
+// main function for creating a puzzle
+function generateWordoku(difficulty : number, wordlist: string[], sudoku: SudokuGen) : string {
     console.log("generating puzzle");
     var puzzle = sudoku.generate(difficultyScale(difficulty));
     var solution = sudoku.solve(puzzle);
@@ -18,7 +20,7 @@ function generateWordoku(difficulty : number, sudoku: SudokuGen) : string {
     console.log(puzzle)
 
     console.log("picking nine letter word")
-    const word = pickWord();
+    const word = pickWord(wordlist);
 
     const wordoku = wordize(word, solution, puzzle);
     console.log("puzzle generated!");
@@ -26,7 +28,9 @@ function generateWordoku(difficulty : number, sudoku: SudokuGen) : string {
     return wordoku;
 }
 
-function pickWord() : string {
+// impure function that returns a random word from a list
+// defaults if the list is empty
+function pickWord(wordlist: string[]) : string {
     console.log("picking random word");
     const word = wordlist[getRandomInt(0, wordlist.length)];
     console.log(word);
@@ -37,6 +41,7 @@ function pickWord() : string {
     }
 }
 
+// takes a puzzle and its solution and returns the letter version
 function wordize(word : string, solution : string, puzzle : string) : string {
     console.log("translating puzzle into letters");
     const diag = diagonal(solution);
@@ -89,15 +94,20 @@ function getRandomInt(min : number, max : number) {
    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// singly linked list using type tags to emulate abstract data types.
 type Nil = { tag: "nil" };
 type Cons<A> = { tag: "cons", h: A, t: List<A> };
 type List<A> = Nil | Cons<A>;
 
+// nil value
 const nil : Nil = { tag : "nil" }
+
+// cons function
 function cons<A>(h: A, t: List<A>) : List<A> {
     return { tag: "cons", h, t };
 }
 
+// converts an array of all one type to a list
 function fromArray<A>(xs: A[]) : List<A> {
     const [head, ...tail] = xs;
     if (head === undefined) {
@@ -107,6 +117,7 @@ function fromArray<A>(xs: A[]) : List<A> {
     }
 }
 
+// converts a list to an array
 function fromList<A>(xs: List<A>) : A[] {
     switch (xs.tag) {
         case "nil"  : return [];
@@ -114,10 +125,21 @@ function fromList<A>(xs: List<A>) : A[] {
     }
 }
 
+// zips two lists together. the length of the list will be the length
+// of the shorter of the two lists.
+//
+// ex. (using array syntax for Lists)
+// > zip([1,2,3], ['a', 'b', 'c'])
+// > [[1, 'a'],[2, 'b'], [3, 'c']]
 function zip<A, B>(as: List<A>, bs: List<B>) : List<readonly [A, B]> {
     return zipWith((a, b) => [a, b] as const, as, bs);
 }
 
+// zips two lists together with a function to form a new list
+//
+// ex. (using array syntax for Lists)
+// > zipWith((a, b) => (a*2) + "-" + b, [1,2,3], ['a', 'b', 'c'])
+// > ["2-a", "4-b", "6-c"]
 function zipWith<A, B, C>(f: (a: A, b: B) => C, as: List<A>, bs: List<B>) : List<C> {
     switch (as.tag) {
         case "nil"  : return nil;
