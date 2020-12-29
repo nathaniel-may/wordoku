@@ -1,4 +1,4 @@
-import * as fp from "./fp";
+import * as Arr from 'node_modules/fp-ts/lib/Array';
 
 // interface so that the generator can be easily swapped out
 interface SudokuGen {
@@ -43,11 +43,12 @@ function pickWord(wordlist: string[]) : string {
 // takes a puzzle and its solution and returns the letter version
 function wordize(word : string, solution : string, puzzle : string) : string {
     console.log("translating puzzle into letters");
-    const diag = fp.fromArray(diagonal(solution));
+    const diag = diagonal(solution);
     console.log("diag: " + diag)
-    const letters = fp.fromArray(word.split(''));
+    const letters = word.split('');
 
-    const wordoku = fp.foldl((b, a) => b.split(a[0]).join(a[1]), puzzle, fp.zip(diag, letters))
+    const wordoku = 
+        Arr.reduce<[string, string], string>(puzzle, (b, a) => b.split(a[0]).join(a[1]))(Arr.zip(diag, letters))
     console.log("translated: ");
     console.log(wordoku);
 
